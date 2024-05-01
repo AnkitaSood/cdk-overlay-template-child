@@ -4,15 +4,16 @@
 </button>
 
 <!-- This template displays the overlay content and is connected to the button -->
-@defer (when isOpen) {
+
   <ng-template
           cdkConnectedOverlay
           [cdkConnectedOverlayOrigin]="trigger"
           [cdkConnectedOverlayOpen]="isOpen"
   >
+  @defer {
       <app-list/>
+  }
   </ng-template>
-}
 
 
 <!-- Copyright 2024 Google LLC. All Rights Reserved.
