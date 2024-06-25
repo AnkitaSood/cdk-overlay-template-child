@@ -1,5 +1,5 @@
-import {Component} from '@angular/core';
-import {OverlayModule} from '@angular/cdk/overlay';
+import {Component, ElementRef, viewChild} from '@angular/core';
+import {ConnectedPosition, Overlay, OverlayModule, OverlayRef} from '@angular/cdk/overlay';
 import { ListComponent } from 'src/list/list.component';
 
 /**
@@ -13,10 +13,32 @@ import { ListComponent } from 'src/list/list.component';
   imports: [OverlayModule, ListComponent],
 })
 export class CdkOverlayBasicExample {
+  triggerElem = viewChild.required<ElementRef>('overlaybtn'); 
   isOpen = false;
+  overlayRef: OverlayRef;
+  constructor(private overlay: Overlay) {}
+
+  closeOverlay() {
+    console.log("close");
+    this.overlayRef.detach(); // Close the overlay
+    this.isOpen = false;
 }
 
+openOverlay() {
+  this.overlayRef = this.overlay.create({
+    hasBackdrop: true, // Optional: Add a backdrop behind the overlay
+    backdropClass: 'cdk-overlay-transparent-backdrop', // Optional: Style the backdrop
+    positionStrategy: this.overlay.position()
+        .flexibleConnectedTo(this.triggerElem())
+        .withPositions([{
+            originX: 'start',
+            originY: 'bottom',
+            overlayX: 'start',
+            overlayY: 'top',
+        }])
+});
 
-/**  Copyright 2024 Google LLC. All Rights Reserved.
-    Use of this source code is governed by an MIT-style license that
-    can be found in the LICENSE file at https://angular.io/license */
+this.isOpen = true;
+}
+
+}
